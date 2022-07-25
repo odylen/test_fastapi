@@ -131,6 +131,7 @@ class Campaign:
         db.commit()
         db.refresh(db_campaign)
         return db_campaign
+
     @staticmethod
     def delete_campaign(campaign_id: int, db: Session):
         db.query(models.Campaign).filter(models.Campaign.id == campaign_id).delete()

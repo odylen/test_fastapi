@@ -80,7 +80,7 @@ def get_all_cards(
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):
-    if not is_admin:
+    if not is_user_admin:
         raise not_admin_exception
     if user_id:
         return paginate(

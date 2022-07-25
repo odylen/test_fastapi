@@ -48,7 +48,7 @@ def edit_campaign(
 ):
     if not is_user_admin:
         raise not_admin_exception
-    return Campaign.create_campaign(campaign, db)
+    return Campaign.edit_campaign(campaign, db)
 
 
 @router.delete("/campaign", status_code=status.HTTP_200_OK)
