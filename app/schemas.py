@@ -30,7 +30,6 @@ class ValidateTokenResponse(BaseModel):
 
 class UserBase(BaseModel):
     phone: str
-    password: str
 
 
 class User(UserBase):
@@ -54,31 +53,30 @@ class UserResponse(BaseModel):
 
 
 class UserEdit(BaseModel):
-    id: int
+    id: Union[int, None] = None
     name: Union[str, None] = None
     family: Union[str, None] = None
     patronymic: Union[str, None] = None
     phone: Union[str, None] = None
-    password: Union[str, None] = None
 
 
 class CampaignBase(BaseModel):
     id: int
-    title: str
-    type: str
-    iconpath: str
+    title: str = None
+    type: str = None
+    iconpath: str = None
 
     class Config:
         orm_mode = True
 
 
 class Campaign(CampaignBase):
-    is_active: bool
-    imagepath: str
-    subtitle: str
-    attention_text: str
-    description: str
-    sort: int
+    is_active: bool = None
+    imagepath: str = None
+    subtitle: str = None
+    attention_text: str = None
+    description: str = None
+    sort: int = None
 
     class Config:
         orm_mode = True

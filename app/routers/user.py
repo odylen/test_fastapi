@@ -11,20 +11,21 @@ from app.exceptions.user import user_not_found_exception, not_admin_exception
 from app.middleware.auth import is_autheticated, is_admin
 from fastapi_pagination.ext.sqlalchemy import paginate
 
-router = APIRouter(prefix="/api", tags=["auth"])
-
+router = APIRouter(prefix="/user", tags=["user"])
 
 @router.get(
-    "/user", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse
+    "/", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse
 )
 def get_user_by_id(
-    user_id: int,
+    user_id: int = None,
     requested_user_id: int = Depends(is_autheticated),
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):
-    if user_id != requested_user_id and not is_user_admin:
+    if user_id and user_id != requested_user_id and not is_user_admin:
         raise not_admin_exception
+    if not user_id:
+        user_id = requested_user_id
     db_user = User.get_user_by_id(user_id, db)
     if not db_user:
         raise user_not_found_exception
@@ -33,7 +34,7 @@ def get_user_by_id(
 
 
 @router.get(
-    "/user_by_phone", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse
+    "/by_phone", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse
 )
 def get_user_by_phone(
     user_phone: str,
@@ -49,24 +50,25 @@ def get_user_by_phone(
     return db_user
 
 
-@router.put("/user", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse)
+@router.put("/", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse)
 def edit_user(
     user: schemas.UserEdit,
     requested_user_id: int = Depends(is_autheticated),
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):
-    if user.id != requested_user_id and not is_user_admin:
+    if user.id and user.id != requested_user_id and not is_user_admin:
         raise not_admin_exception
-
-    db_user = User.get_user_by_id(requested_user_id, db)
+    if not user.id:
+        user.id = requested_user_id
+    db_user = User.get_user_by_id(user.id, db)
     if not db_user:
         raise user_not_found_exception
 
     return User.edit_user(user, db)
 
 
-@router.get("/user/all", status_code=status.HTTP_200_OK, response_model=Page[schemas.User])
+@router.get("/all", status_code=status.HTTP_200_OK, response_model=Page[schemas.UserResponse])
 def get_all_users(
     is_user_admin: bool = Depends(is_admin), db: Session = Depends(get_db)
 ):

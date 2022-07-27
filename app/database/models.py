@@ -25,7 +25,6 @@ class User(Base):
     name = Column(String)
     family = Column(String)
     patronymic = Column(String)
-    password = Column(String)
     type = Column(Enum(AccountType), default=AccountType.USER)
 
     bonus_card = relationship("BonusCard")

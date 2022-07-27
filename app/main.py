@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status
+from fastapi import FastAPI, status, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import uvicorn
@@ -14,11 +14,13 @@ Base.metadata.create_all(bind=engine)
 origins = []
 
 app = FastAPI()
+api_router = APIRouter(prefix="/api")
 
-app.include_router(auth.router)
-app.include_router(bonus_card.router)
-app.include_router(user.router)
-app.include_router(campaign.router)
+api_router.include_router(auth.router)
+api_router.include_router(bonus_card.router)
+api_router.include_router(user.router)
+api_router.include_router(campaign.router)
+app.include_router(api_router)
 
 app.add_middleware(
     CORSMiddleware,

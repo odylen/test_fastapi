@@ -11,11 +11,11 @@ from app.database.queries import Campaign
 from app.exceptions.user import not_admin_exception
 from app.middleware.auth import is_admin
 
-router = APIRouter(prefix="/api", tags=["bonus"])
+router = APIRouter(prefix="/campaign", tags=["campaign"])
 
 
 @router.get(
-    "/campaign",
+    "/",
     status_code=status.HTTP_200_OK,
     response_model=schemas.Campaign,
 )
@@ -29,7 +29,7 @@ def get_campaign(
     return campaign_db
 
 
-@router.post("/campaign", status_code=status.HTTP_200_OK, response_model=schemas.Campaign)
+@router.post("/", status_code=status.HTTP_200_OK, response_model=schemas.Campaign)
 def add_campaign(
     campaign: schemas.CampaignAdd,
     is_user_admin: bool = Depends(is_admin),
@@ -40,7 +40,7 @@ def add_campaign(
     return Campaign.create_campaign(campaign, db)
 
 
-@router.put("/campaign", status_code=status.HTTP_200_OK, response_model=schemas.Campaign)
+@router.put("/", status_code=status.HTTP_200_OK, response_model=schemas.Campaign)
 def edit_campaign(
     campaign: schemas.Campaign,
     is_user_admin: bool = Depends(is_admin),
@@ -51,7 +51,7 @@ def edit_campaign(
     return Campaign.edit_campaign(campaign, db)
 
 
-@router.delete("/campaign", status_code=status.HTTP_200_OK)
+@router.delete("/", status_code=status.HTTP_200_OK)
 def delete_campaign(
     campaign_id,
     is_user_admin: bool = Depends(is_admin),
@@ -63,7 +63,7 @@ def delete_campaign(
 
 
 @router.get(
-    "/campaign/all",
+    "/all",
     status_code=status.HTTP_200_OK,
     response_model=List[schemas.CampaignBase],
 )

@@ -12,7 +12,8 @@ from jose import JWTError, jwt
 from aiohttp import ClientSession
 
 from app.database import models
-from app.settings import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.exceptions.sms import sending_sms_exception
+from app.settings import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -27,33 +28,39 @@ def get_password_hash(password: str):
 
 
 def create_access_token(user_id: Dict):
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.utcnow() + timedelta(minutes=settings.access_token_expire_minutes)
     data = {
         "id": user_id,
     }
     to_encode = data.copy()
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
-        to_encode, os.environ.get("SECRET_KEY"), algorithm=os.environ.get("ALGORITHM")
+        to_encode, settings.secret_key, algorithm=settings.algorithm
     )
     return encoded_jwt
 
 
 def generate_code(code_length) -> str:
-    code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=code_length))
+    code = ''.join(random.choices(string.digits, k=code_length))
     return code
 
 
 async def send_sms(phone: str, message: str):
     params = {
         "method": "push_msg",
-        "email": os.environ.get("SMS_EMAIL"),
-        "password": os.environ.get("SMS_PASSWORD"),
+        "email": settings.sms_email,
+        "password": settings.sms_password,
         "text": message,
         "phone": phone,
-        "sender_name": os.environ.get("SMS_SENDER"),
+        "sender_name": settings.sms_sender,
         "format": "json",
     }
     async with ClientSession() as session:
         resp = await session.post("http://ssl.bs00.ru/", params=params)
-    return "hjj"
+    try:
+        err_code = (await resp.json())['response']['msg']['err_code']
+        if err_code == 0:
+            return True
+    except:
+        pass
+    return False

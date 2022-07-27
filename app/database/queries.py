@@ -7,9 +7,10 @@ from sqlalchemy.exc import IntegrityError
 
 from app import schemas
 from app.database import models
+from app.database.models import AccountType
 from app.helpers.auth import get_password_hash, generate_code
 from app.exceptions.user import user_already_exists_exception
-from app.settings import CARD_CODE_LENGTH
+from app.settings import settings
 
 
 class User:
@@ -22,13 +23,13 @@ class User:
         return db.query(models.User).filter(models.User.phone == phone).first()
 
     @staticmethod
-    def create_user(user: schemas.UserBase, db: Session):
+    def create_user(user: schemas.UserBase, db: Session, is_admin:bool= False):
         try:
-            user.password = get_password_hash(user.password)
-            print(user.password)
             db_user = models.User(**user.dict())
+            if is_admin:
+                db_user.type = AccountType.ADMIN
             db.add(db_user)
-            card_code = generate_code(CARD_CODE_LENGTH)
+            card_code = generate_code(settings.card_code_length)
             bonus_card = models.BonusCard(code=card_code)
             db_user.bonus_card.append(bonus_card)
             db.add(bonus_card)
@@ -83,7 +84,7 @@ class BonusCard:
 
     @staticmethod
     def create_bonus_card(user_id: int, db: Session) -> models.BonusCard:
-        card_code = generate_code(CARD_CODE_LENGTH)
+        card_code = generate_code(settings.card_code_length)
         db_bonus_card = models.BonusCard(user_id=user_id, code=card_code)
         db.add(db_bonus_card)
         db.commit()
@@ -91,7 +92,7 @@ class BonusCard:
         return db_bonus_card
 
     @staticmethod
-    def edit_bonus_card(card_id: int, user_id: int, code: str, db: Session):
+    def edit_bonus_card(card_id: int, user_id: int, code: str, db: Session) -> schemas.BonusCard:
         db_bonus_card: models.BonusCard = db.query(models.BonusCard).filter(models.BonusCard.id == card_id).first()
         if user_id:
             db_bonus_card.user = user_id
