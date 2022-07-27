@@ -58,8 +58,8 @@ async def send_sms(phone: str, message: str):
     async with ClientSession() as session:
         resp = await session.post("http://ssl.bs00.ru/", params=params)
     try:
-        err_code = (await resp.json())['response']['msg']['err_code']
-        if err_code == 0:
+        err_code = (await resp.json(content_type=None))['response']['msg']['err_code']
+        if err_code == "0":
             return True
     except:
         pass

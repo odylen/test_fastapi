@@ -43,7 +43,6 @@ async def generate_and_send_sms(phone: str, db: Session) -> bool:
 @router.post(
     "/send_code",
     status_code=status.HTTP_200_OK,
-    response_model=schemas.SendTokenResponse,
 )
 async def send_code(phone: str, db: Session = Depends(get_db)):
     send_status = await generate_and_send_sms(phone=phone, db=db)
