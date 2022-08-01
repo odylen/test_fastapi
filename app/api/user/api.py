@@ -3,6 +3,7 @@ from fastapi_pagination import Page
 from sqlalchemy.orm import Session
 
 from app.api.common.queries import User
+from app.api.common.schemas import RequestStatus
 from app.api.user import schemas
 from app.database import models
 from app.database.db import get_db
@@ -76,3 +77,13 @@ def get_all_users(
     if not is_user_admin:
         raise not_admin_exception
     return paginate(db.query(models.User).filter(models.User.type == AccountType.USER))
+
+
+@router.post(
+    "/add_to_favorites", status_code=status.HTTP_200_OK, response_model=RequestStatus
+)
+def add_to_favorites(
+    product_id: int, requested_user_id: int = Depends(is_authenticated), db: Session = Depends(get_db)
+):
+    User.add_to_favorites(requested_user_id, product_id, db)
+    return RequestStatus()

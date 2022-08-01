@@ -4,6 +4,7 @@ from fastapi import APIRouter, status, Body, Depends
 from sqlalchemy.orm import Session
 
 from app.api.auth import schemas
+from app.api.auth.queries import PhoneCode
 from app.api.common.helpers import generate_code
 from app.api.common.queries import User
 from app.database import models
