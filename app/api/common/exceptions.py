@@ -11,11 +11,6 @@ user_not_found_exception = HTTPException(
     detail="User does not exist",
 )
 
-incorrect_password_exception = HTTPException(
-    status_code=status.HTTP_401_UNAUTHORIZED,
-    detail="Incorrect Password",
-)
-
 not_admin_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Admin only",

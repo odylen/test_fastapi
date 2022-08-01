@@ -1,30 +1,14 @@
-import random
-import os
-import string
-
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
-from typing import Optional, Dict
+from typing import Dict
 
-from fastapi import status, HTTPException, Header
-from sqlalchemy.orm import Session
-from jose import JWTError, jwt
+from jose import jwt
 from aiohttp import ClientSession
 
-from app.database import models
-from app.exceptions.sms import sending_sms_exception
 from app.settings import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
-def verify_password(password: str, hashed_password: str):
-    print(password, hashed_password)
-    return pwd_context.verify(password, hashed_password)
-
-
-def get_password_hash(password: str):
-    return pwd_context.hash(password)
 
 
 def create_access_token(user_id: Dict):
@@ -39,10 +23,6 @@ def create_access_token(user_id: Dict):
     )
     return encoded_jwt
 
-
-def generate_code(code_length) -> str:
-    code = ''.join(random.choices(string.digits, k=code_length))
-    return code
 
 
 async def send_sms(phone: str, message: str):

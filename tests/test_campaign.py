@@ -4,10 +4,12 @@ import pytest as pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 
-from app import schemas
+from app.api.auth.queries import PhoneCode
+from app.api.campaign.queries import Campaign
+from app.api.common.queries import User
+from app.api.user import schemas
 from app.database import models
 from app.database.db import get_db
-from app.database.queries import PhoneCode, User, BonusCard, Campaign
 from app.settings import settings
 from tests.conftest import override_get_db
 

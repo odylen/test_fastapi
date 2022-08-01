@@ -3,63 +3,6 @@ from typing import Union
 from pydantic import BaseModel
 
 
-class BonusCardBase(BaseModel):
-    user_id: int = None
-    code: str = None
-
-
-class BonusCard(BonusCardBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
-class Token(BaseModel):
-    access_token: str
-
-
-class SendTokenResponse(BaseModel):
-    code_id: str
-
-
-class ValidateTokenResponse(BaseModel):
-    code_id: str
-    confirmed: bool
-
-
-class UserBase(BaseModel):
-    phone: str
-
-
-class User(UserBase):
-    id: int
-    name: str = None
-    family: str = None
-    patronymic: str = None
-    class Config:
-        orm_mode = True
-
-
-class UserResponse(BaseModel):
-    id: int
-    phone: str
-    name: str = None
-    family: str = None
-    patronymic: str = None
-    # allows conversion between Pydantic and ORMs
-    class Config:
-        orm_mode = True
-
-
-class UserEdit(BaseModel):
-    id: Union[int, None] = None
-    name: Union[str, None] = None
-    family: Union[str, None] = None
-    patronymic: Union[str, None] = None
-    phone: Union[str, None] = None
-
-
 class CampaignBase(BaseModel):
     id: int
     title: str = None

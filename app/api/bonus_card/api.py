@@ -3,12 +3,13 @@ from fastapi_pagination import Page
 from sqlalchemy.orm import Session
 from starlette import status
 
-from app import schemas
+from app.api.bonus_card import schemas
+from app.api.bonus_card.queries import BonusCard
+from app.api.common.schemas import RequestStatus
 from app.database import models
 from app.database.db import get_db
-from app.database.queries import User, BonusCard
-from app.exceptions.user import not_admin_exception
-from app.middleware.auth import is_autheticated, is_admin
+from app.api.common.exceptions import not_admin_exception
+from app.middleware.auth import is_authenticated, is_admin
 from fastapi_pagination.ext.sqlalchemy import paginate
 
 router = APIRouter(prefix="/bonus_card", tags=["bonus"])
@@ -21,7 +22,7 @@ router = APIRouter(prefix="/bonus_card", tags=["bonus"])
 )
 def get_bonus_card(
     card_id: int,
-    requested_user_id: int = Depends(is_autheticated),
+    requested_user_id: int = Depends(is_authenticated),
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):
@@ -36,7 +37,7 @@ def get_bonus_card(
 @router.post("/", status_code=status.HTTP_200_OK, response_model=schemas.BonusCard)
 def add_bonus_card(
     user_id=None,
-    requested_user_id: int = Depends(is_autheticated),
+    requested_user_id: int = Depends(is_authenticated),
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):
@@ -63,7 +64,7 @@ def edit_bonus_card(
     return BonusCard.edit_bonus_card(card_id, user_id=user_id, code=card_code, db=db)
 
 
-@router.delete("/", status_code=status.HTTP_200_OK)
+@router.delete("/", status_code=status.HTTP_200_OK, response_model=RequestStatus)
 def delete_bonus_card(
     card_id,
     is_user_admin: bool = Depends(is_admin),
@@ -75,7 +76,7 @@ def delete_bonus_card(
     if not db_card:
         raise HTTPException(status_code=404, detail="Card not found")
     BonusCard.delete_bonus_card(card_id, db)
-    return {'success': True}
+    return RequestStatus()
 
 
 @router.get(
@@ -85,7 +86,7 @@ def delete_bonus_card(
 )
 def get_all_cards(
     user_id: str = None,
-    requested_user_id: int = Depends(is_autheticated),
+    requested_user_id: int = Depends(is_authenticated),
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):

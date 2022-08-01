@@ -3,9 +3,8 @@ from datetime import datetime, timedelta
 from fastapi import status
 from fastapi.testclient import TestClient
 
+from app.api.auth.queries import PhoneCode
 from app.database import models
-from app.database.db import get_db
-from app.database.queries import PhoneCode
 from app.settings import settings
 from tests.conftest import override_get_db
 

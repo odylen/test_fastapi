@@ -1,14 +1,15 @@
-from typing import List, Union
+from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
 
-from app import schemas
+from app.api.campaign import schemas
+from app.api.campaign.queries import Campaign
+from app.api.common.schemas import RequestStatus
 from app.database import models
 from app.database.db import get_db
-from app.database.queries import Campaign
-from app.exceptions.user import not_admin_exception
+from app.api.common.exceptions import not_admin_exception
 from app.middleware.auth import is_admin
 
 router = APIRouter(prefix="/campaign", tags=["campaign"])
@@ -51,7 +52,7 @@ def edit_campaign(
     return Campaign.edit_campaign(campaign, db)
 
 
-@router.delete("/", status_code=status.HTTP_200_OK)
+@router.delete("/", status_code=status.HTTP_200_OK, response_model=RequestStatus)
 def delete_campaign(
     campaign_id,
     is_user_admin: bool = Depends(is_admin),
@@ -60,6 +61,7 @@ def delete_campaign(
     if not is_user_admin:
         raise not_admin_exception
     Campaign.delete_campaign(campaign_id, db)
+    return RequestStatus()
 
 
 @router.get(

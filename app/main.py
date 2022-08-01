@@ -4,10 +4,13 @@ from dotenv import load_dotenv
 import uvicorn
 from fastapi_pagination import add_pagination
 
-load_dotenv()
-
+from app.api.auth.api import router as auth_router
+from app.api.bonus_card.api import router as bonus_router
+from app.api.campaign.api import router as campaign_router
+from app.api.user.api import router as user_router
 from database.db import Base, engine
-from routers import auth, bonus_card, campaign, user
+
+load_dotenv()
 
 Base.metadata.create_all(bind=engine)
 
@@ -16,10 +19,10 @@ origins = []
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
-api_router.include_router(auth.router)
-api_router.include_router(bonus_card.router)
-api_router.include_router(user.router)
-api_router.include_router(campaign.router)
+api_router.include_router(auth_router)
+api_router.include_router(bonus_router)
+api_router.include_router(campaign_router)
+api_router.include_router(user_router)
 app.include_router(api_router)
 
 app.add_middleware(
@@ -30,11 +33,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 add_pagination(app)
+
+
 @app.get("/", status_code=status.HTTP_200_OK, tags=["API Check"])
 def check():
-    return {
-        "message": "Hello World!"
-    }
+    return {"message": "Hello World!"}
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     uvicorn.run(app)

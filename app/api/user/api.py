@@ -1,24 +1,23 @@
-from fastapi import APIRouter, status, Body, Depends
+from fastapi import APIRouter, status, Depends
 from fastapi_pagination import Page
 from sqlalchemy.orm import Session
 
-from app import schemas
+from app.api.common.queries import User
+from app.api.user import schemas
 from app.database import models
 from app.database.db import get_db
 from app.database.models import AccountType
-from app.database.queries import User
-from app.exceptions.user import user_not_found_exception, not_admin_exception
-from app.middleware.auth import is_autheticated, is_admin
+from app.api.common.exceptions import user_not_found_exception, not_admin_exception
+from app.middleware.auth import is_authenticated, is_admin
 from fastapi_pagination.ext.sqlalchemy import paginate
 
 router = APIRouter(prefix="/user", tags=["user"])
 
-@router.get(
-    "/", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse
-)
+
+@router.get("/", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse)
 def get_user_by_id(
     user_id: int = None,
-    requested_user_id: int = Depends(is_autheticated),
+    requested_user_id: int = Depends(is_authenticated),
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):
@@ -38,7 +37,7 @@ def get_user_by_id(
 )
 def get_user_by_phone(
     user_phone: str,
-    requested_user_id: int = Depends(is_autheticated),
+    requested_user_id: int = Depends(is_authenticated),
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):
@@ -53,7 +52,7 @@ def get_user_by_phone(
 @router.put("/", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse)
 def edit_user(
     user: schemas.UserEdit,
-    requested_user_id: int = Depends(is_autheticated),
+    requested_user_id: int = Depends(is_authenticated),
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):
@@ -68,7 +67,9 @@ def edit_user(
     return User.edit_user(user, db)
 
 
-@router.get("/all", status_code=status.HTTP_200_OK, response_model=Page[schemas.UserResponse])
+@router.get(
+    "/all", status_code=status.HTTP_200_OK, response_model=Page[schemas.UserResponse]
+)
 def get_all_users(
     is_user_admin: bool = Depends(is_admin), db: Session = Depends(get_db)
 ):
