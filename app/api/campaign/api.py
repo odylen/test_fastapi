@@ -44,7 +44,7 @@ def add_campaign(
 
 @router.put("/", status_code=status.HTTP_200_OK, response_model=schemas.Campaign)
 def edit_campaign(
-    campaign: schemas.Campaign,
+    campaign: schemas.CampaignEdit,
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):

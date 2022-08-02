@@ -8,7 +8,9 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Enum,
-    Table, ARRAY,
+    Table,
+    ARRAY,
+    JSON, Float,
 )
 from sqlalchemy.orm import relationship
 
@@ -48,9 +50,7 @@ class User(Base):
     type = Column(Enum(AccountType), default=AccountType.USER)
 
     bonus_card = relationship("BonusCard")
-    favorite_products = relationship(
-        "Product", secondary=favorite_product_association
-    )
+    favorite_products = relationship("Product", secondary=favorite_product_association)
 
 
 class PhoneCode(Base):
@@ -99,10 +99,7 @@ class Product(Base):
     constituents_descr = Column(String)
     weight = Column(String)
 
-    categories_json = relationship(
-        "Category", secondary=product_category_association
-    )
-
+    categories_json = relationship("Category", secondary=product_category_association)
 
 
 class Category(Base):
@@ -110,3 +107,15 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
+
+
+class Bakery(Base):
+    __tablename__ = "bakery"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String)
+    address = Column(String)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    images = Column(ARRAY(String))
+    open_days = Column(JSON)

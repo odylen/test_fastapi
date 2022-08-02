@@ -5,6 +5,7 @@ import uvicorn
 from fastapi_pagination import add_pagination
 
 from app.api.auth.api import router as auth_router
+from app.api.bakery.api import router as bakery_router
 from app.api.bonus_card.api import router as bonus_router
 from app.api.campaign.api import router as campaign_router
 from app.api.categories.api import router as category_router
@@ -27,6 +28,7 @@ api_router.include_router(campaign_router)
 api_router.include_router(user_router)
 api_router.include_router(category_router)
 api_router.include_router(product_router)
+api_router.include_router(bakery_router)
 app.include_router(api_router)
 
 app.add_middleware(
