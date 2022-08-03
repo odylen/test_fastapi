@@ -97,7 +97,7 @@ def add_to_favorites(
     return RequestStatus()
 
 
-@router.post("/cart", status_code=status.HTTP_200_OK, response_model=OptCartResp)
+@router.post("/cart/product", status_code=status.HTTP_200_OK, response_model=OptCartResp)
 def add_to_cart(
     product_id: int,
     return_cart: bool = False,
@@ -111,7 +111,7 @@ def add_to_cart(
     return resp
 
 
-@router.delete("/cart", status_code=status.HTTP_200_OK, response_model=OptCartResp)
+@router.delete("/cart/product", status_code=status.HTTP_200_OK, response_model=OptCartResp)
 def delete_from_cart(
     product_id: int,
     return_cart: bool = False,
