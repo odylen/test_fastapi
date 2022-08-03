@@ -8,7 +8,7 @@ from app.api.categories.schemas import Category
 class ProductBase(BaseModel):
     id: int
     title: str = None
-    price: str = None
+    price: float = None
     categories_json: List[Category] = None
     favorite: bool = False
 
@@ -31,7 +31,7 @@ class ProductAdd(BaseModel):
     title: str
     description: str
     iconpath: str
-    price: str
+    price: float
     images_paths_json: List[str]
     categories_json: List[int]
     nutritional_value_json: str
@@ -47,7 +47,7 @@ class ProductEdit(ProductBase):
     title: Union[str, None] = None
     description: str = None
     iconpath: str = None
-    price: str = None
+    price: float = None
     images_paths_json: List[str] = None
     categories_json: List[int] = None
     nutritional_value_json: str = None

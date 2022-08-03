@@ -10,7 +10,8 @@ from sqlalchemy import (
     Enum,
     Table,
     ARRAY,
-    JSON, Float,
+    JSON,
+    Float,
 )
 from sqlalchemy.orm import relationship
 
@@ -48,9 +49,19 @@ class User(Base):
     family = Column(String)
     patronymic = Column(String)
     type = Column(Enum(AccountType), default=AccountType.USER)
+    cart = relationship("Cart", back_populates="user", uselist=False)
 
     bonus_card = relationship("BonusCard")
+    delivery_addresses = relationship("DeliveryAddress")
     favorite_products = relationship("Product", secondary=favorite_product_association)
+
+
+class DeliveryAddress(Base):
+    __tablename__ = "delivery_address"
+
+    id = Column(Integer, primary_key=True, index=True)
+    address = Column(String)
+    user_id = Column(Integer, ForeignKey("user.id"))
 
 
 class PhoneCode(Base):
@@ -92,7 +103,7 @@ class Product(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     description = Column(String)
-    price = Column(String)
+    price = Column(Float)
     iconpath = Column(String)
     images_paths_json = Column(ARRAY(String))
     nutritional_value_json = Column(String)
@@ -119,3 +130,63 @@ class Bakery(Base):
     longitude = Column(Float)
     images = Column(ARRAY(String))
     open_days = Column(JSON)
+
+
+class DeliveryOrder(Base):
+    __tablename__ = "delivery_order"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    bakery_id = Column(Integer, ForeignKey("bakery.id"))
+    delivery_address_id = Column(Integer, ForeignKey("delivery_address.id"))
+    products_ids = Column(ARRAY(Integer))
+    comment = Column(String)
+
+
+class PickupOrder(Base):
+    __tablename__ = "pickup_order"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    delivery_address_id = Column(Integer, ForeignKey("delivery_address.id"))
+    products_ids = Column(ARRAY(Integer))
+    comment = Column(String)
+
+
+class DiscountType(enum.Enum):
+    PERCENT = 1
+    ABSOLUTE = 2
+
+
+class Promocode(Base):
+    __tablename__ = "promocode"
+
+    id = Column(Integer, primary_key=True, index=True)
+    code = Column(String)
+    type = Column(Enum(DiscountType))
+    amount = Column(Float)
+    cart = relationship("Cart", back_populates="promocode")
+
+class CartItem(Base):
+    __tablename__ = "cart_item"
+
+    id = Column(Integer, primary_key=True, index=True)
+    product_id = Column(Integer, ForeignKey("product.id"))
+    cart_id = Column(Integer, ForeignKey("cart.id"))
+    amount = Column(Integer)
+
+    product = relationship("Product")
+    cart = relationship("Cart")
+
+
+class Cart(Base):
+    __tablename__ = "cart"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    promocode_id = Column(Integer, ForeignKey("promocode.id"))
+    total = Column(Integer)
+
+    products = relationship("CartItem")
+    user = relationship("User", back_populates="cart")
+    promocode = relationship("Promocode", back_populates="cart")

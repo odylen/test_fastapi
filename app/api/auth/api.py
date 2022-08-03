@@ -7,6 +7,7 @@ from app.api.auth import schemas
 from app.api.auth.queries import PhoneCode
 from app.api.common.helpers import generate_code
 from app.api.common.queries import User
+from app.api.user.schemas import UserBase
 from app.database import models
 from app.api.auth.exceptions import (
     sending_sms_exception,
@@ -73,7 +74,7 @@ def login(
 
     db_user = User.get_user_by_phone(phone, db)
     if not db_user:
-        db_user = User.create_user(schemas.UserBase(phone=phone), db)
+        db_user = User.create_user(UserBase(phone=phone), db)
     access_token = create_access_token(db_user.id)
 
     db.query(models.PhoneCode).filter(models.PhoneCode.phone == phone, models.PhoneCode.code == code).delete()

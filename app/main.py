@@ -10,6 +10,7 @@ from app.api.bonus_card.api import router as bonus_router
 from app.api.campaign.api import router as campaign_router
 from app.api.categories.api import router as category_router
 from app.api.product.api import router as product_router
+from app.api.promocode.api import router as promocode_router
 from app.api.user.api import router as user_router
 from database.db import Base, engine
 
@@ -29,6 +30,7 @@ api_router.include_router(user_router)
 api_router.include_router(category_router)
 api_router.include_router(product_router)
 api_router.include_router(bakery_router)
+api_router.include_router(promocode_router)
 app.include_router(api_router)
 
 app.add_middleware(
