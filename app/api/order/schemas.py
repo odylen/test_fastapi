@@ -8,7 +8,7 @@ from app.database.models import OrderType, OrderStatus
 
 class OrderCreate(BaseModel):
     type: OrderType
-    bakery_id: int = None
+    shop_id: int = None
     delivery_address_id: int = None
     comment: str = None
 
@@ -24,7 +24,7 @@ class Order(BaseModel):
     cart: dict
     time_created: datetime.datetime
     comment: str = None
-    bakery_id: int = None
+    shop_id: int = None
     delivery_address_id: int = None
 
     class Config:

@@ -10,7 +10,7 @@ class Bakery:
         return db.query(models.Bakery).filter(models.Bakery.id == bakery_id).first()
 
     @staticmethod
-    def create_bakery(bakery: schemas.BakeryBase, db: Session) -> models.Bakery:
+    def create_bakery(bakery: schemas.ShopBase, db: Session) -> models.Bakery:
         db_bakery = models.Bakery(**bakery.dict())
         db.add(db_bakery)
         db.commit()
@@ -18,7 +18,7 @@ class Bakery:
         return db_bakery
 
     @staticmethod
-    def edit_bakery(bakery: schemas.BakeryEdit, db: Session) -> models.Bakery:
+    def edit_bakery(bakery: schemas.ShopEdit, db: Session) -> models.Bakery:
         db_bakery: models.Bakery = (
             db.query(models.Bakery).filter(models.Bakery.id == bakery.id).first()
         )

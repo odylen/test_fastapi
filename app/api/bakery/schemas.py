@@ -8,7 +8,7 @@ class WorkingHours(BaseModel):
     opening_hours: str
 
 
-class BakeryBase(BaseModel):
+class ShopBase(BaseModel):
     title: str
     address: str
     latitude: float
@@ -17,14 +17,14 @@ class BakeryBase(BaseModel):
     open_days: List[WorkingHours]
 
 
-class Bakery(BakeryBase):
+class Shop(ShopBase):
     id: int
 
     class Config:
         orm_mode = True
 
 
-class BakeryEdit(BaseModel):
+class ShopEdit(BaseModel):
     id: int
     title: str = None
     address: str = None

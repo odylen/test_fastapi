@@ -47,7 +47,7 @@ def create_order(
     requested_user_id: int = Depends(is_authenticated),
     db: Session = Depends(get_db),
 ):
-    if (order.type == OrderType.PICKUP and not order.bakery_id) or (
+    if (order.type == OrderType.PICKUP and not order.shop_id) or (
         order.type == OrderType.DELIVERY and not order.delivery_address_id
     ):
         raise invalid_order_input_exception

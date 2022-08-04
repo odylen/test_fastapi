@@ -164,7 +164,7 @@ class Order(Base):
     type = Column(Enum(OrderType))
     status = Column(Enum(OrderStatus), default=OrderStatus.PAYMENT)
     total = Column(Float)
-    bakery_id = Column(Integer, ForeignKey("bakery.id"))
+    shop_id = Column(Integer, ForeignKey("bakery.id"))
     delivery_address_id = Column(Integer, ForeignKey("delivery_address.id"))
     payment_link = Column(String)
     comment = Column(String)
