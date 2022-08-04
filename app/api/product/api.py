@@ -116,3 +116,15 @@ def get_all_products(
         resp.categories = cats
         product_list.append(resp)
     return product_list
+
+
+@router.get(
+    "/all/list",
+    status_code=status.HTTP_200_OK,
+    response_model=List[schemas.ProductBase],
+)
+def get_all_products(
+    db: Session = Depends(get_db),
+):
+
+    return db.query(models.Product).all()
