@@ -11,7 +11,7 @@ from sqlalchemy import (
     Table,
     ARRAY,
     JSON,
-    Float,
+    Float, func,
 )
 from sqlalchemy.orm import relationship
 
@@ -143,14 +143,31 @@ class DeliveryOrder(Base):
     comment = Column(String)
 
 
-class PickupOrder(Base):
-    __tablename__ = "pickup_order"
+class OrderType(enum.Enum):
+    DELIVERY = 1
+    PICKUP = 2
+
+
+class OrderStatus(enum.Enum):
+    PAYMENT = 1
+    PAID = 2
+    DONE = 2
+
+
+class Order(Base):
+    __tablename__ = "order"
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("user.id"))
+    type = Column(Enum(OrderType))
+    status = Column(Enum(OrderStatus), default=OrderStatus.PAYMENT)
+    total = Column(Float)
+    bakery_id = Column(Integer, ForeignKey("bakery.id"))
     delivery_address_id = Column(Integer, ForeignKey("delivery_address.id"))
-    products_ids = Column(ARRAY(Integer))
+    payment_link = Column(String)
     comment = Column(String)
+    cart = Column(JSON)
+    time_created = Column(DateTime(timezone=True), server_default=func.now())
 
 
 class DiscountType(enum.Enum):

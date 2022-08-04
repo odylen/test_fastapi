@@ -7,6 +7,7 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
 
     access_token_expire_minutes: int = 100
+    refresh_token_expire_minutes: int = 10000
 
     sms_code_expire_minutes: int = 100
     sms_code_length: int = 5

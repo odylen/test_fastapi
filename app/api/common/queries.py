@@ -16,7 +16,7 @@ from app.settings import settings
 
 class User:
     @staticmethod
-    def get_user_by_id(user_id: int, db: Session):
+    def get_user_by_id(user_id: int, db: Session) -> models.User:
         return db.query(models.User).filter(models.User.id == user_id).first()
 
     @staticmethod
@@ -73,6 +73,18 @@ class User:
             db.query(models.User).filter(models.User.id == user_id).first()
         )
         db_user.favorite_products.append(Product.get_product_by_id(product_id, db))
+
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+
+    @staticmethod
+    def delete_from_favorites(user_id: int, product_id, db: Session) -> models.User:
+        db_user: models.User = (
+            db.query(models.User).filter(models.User.id == user_id).first()
+        )
+        db_user.favorite_products.remove(Product.get_product_by_id(product_id, db))
 
         db.add(db_user)
         db.commit()

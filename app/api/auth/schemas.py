@@ -2,7 +2,8 @@ from pydantic import BaseModel
 
 
 class Token(BaseModel):
-    access_token: str
+    access: str
+    refresh: str
 
 
 class SendTokenResponse(BaseModel):

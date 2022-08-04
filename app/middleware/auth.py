@@ -16,6 +16,8 @@ async def is_authenticated(authorization: str = Header(...)):
         payload = jwt.decode(
             token, os.environ.get("SECRET_KEY"), algorithms=os.environ.get("ALGORITHM")
         )
+        if payload.get("type") != 'access':
+            raise token_exception
         return payload.get("id")
     except JWTError as e:
         raise token_exception

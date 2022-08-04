@@ -4,6 +4,7 @@ from fastapi import APIRouter, status, Depends
 from fastapi_pagination import Page
 from sqlalchemy.orm import Session
 
+from app.api.auth.helpers import normalize_phone
 from app.api.common.helpers import count_cart
 from app.api.common.queries import User
 from app.api.common.schemas import RequestStatus
@@ -48,6 +49,7 @@ def get_user_by_phone(
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
 ):
+    user_phone = normalize_phone(user_phone)
     db_user = User.get_user_by_phone(user_phone, db)
     if not db_user:
         raise user_not_found_exception
@@ -97,7 +99,23 @@ def add_to_favorites(
     return RequestStatus()
 
 
-@router.post("/cart/product", status_code=status.HTTP_200_OK, response_model=OptCartResp)
+@router.delete(
+    "/remove_from_favorites",
+    status_code=status.HTTP_200_OK,
+    response_model=RequestStatus,
+)
+def add_to_favorites(
+    product_id: int,
+    requested_user_id: int = Depends(is_authenticated),
+    db: Session = Depends(get_db),
+):
+    User.delete_from_favorites(requested_user_id, product_id, db)
+    return RequestStatus()
+
+
+@router.post(
+    "/cart/product", status_code=status.HTTP_200_OK, response_model=OptCartResp
+)
 def add_to_cart(
     product_id: int,
     return_cart: bool = False,
@@ -111,8 +129,10 @@ def add_to_cart(
     return resp
 
 
-@router.delete("/cart/product", status_code=status.HTTP_200_OK, response_model=OptCartResp)
-def delete_from_cart(
+@router.delete(
+    "/cart/product", status_code=status.HTTP_200_OK, response_model=OptCartResp
+)
+def delete_all_cart(
     product_id: int,
     return_cart: bool = False,
     requested_user_id: int = Depends(is_authenticated),
@@ -142,9 +162,13 @@ def get_cart(
     return count_cart(cart)
 
 
-@router.post("/cart/promocode", status_code=status.HTTP_200_OK, response_model=schemas.CartResp)
+@router.post(
+    "/cart/promocode", status_code=status.HTTP_200_OK, response_model=schemas.CartResp
+)
 def add_promocode(
-    promocode: str, requested_user_id: int = Depends(is_authenticated), db: Session = Depends(get_db)
+    promocode: str,
+    requested_user_id: int = Depends(is_authenticated),
+    db: Session = Depends(get_db),
 ):
     promocode_db = Promocode.get_promocode_by_code(promocode, db)
     if not promocode_db:
@@ -154,7 +178,9 @@ def add_promocode(
     return count_cart(cart)
 
 
-@router.delete("/cart/promocode", status_code=status.HTTP_200_OK, response_model=schemas.CartResp)
+@router.delete(
+    "/cart/promocode", status_code=status.HTTP_200_OK, response_model=schemas.CartResp
+)
 def delete_promocode(
     requested_user_id: int = Depends(is_authenticated), db: Session = Depends(get_db)
 ):
@@ -187,6 +213,8 @@ def get_address(
     requested_user_id: int = Depends(is_authenticated),
     db: Session = Depends(get_db),
 ):
-    return db.query(models.DeliveryAddress).filter(
-        models.DeliveryAddress.user_id == requested_user_id
-    ).all()
+    return (
+        db.query(models.DeliveryAddress)
+        .filter(models.DeliveryAddress.user_id == requested_user_id)
+        .all()
+    )

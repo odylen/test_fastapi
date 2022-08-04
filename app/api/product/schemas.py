@@ -5,11 +5,18 @@ from pydantic import BaseModel
 from app.api.categories.schemas import Category
 
 
+class ProductCategory(BaseModel):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
 class ProductBase(BaseModel):
     id: int
     title: str = None
     price: float = None
-    categories_json: List[Category] = None
+    categories: List[ProductCategory] = None
     favorite: bool = False
 
     class Config:
@@ -33,7 +40,7 @@ class ProductAdd(BaseModel):
     iconpath: str
     price: float
     images_paths_json: List[str]
-    categories_json: List[int]
+    categories: List[int]
     nutritional_value_json: str
     constituents_descr: str
     weight: str
@@ -49,7 +56,7 @@ class ProductEdit(ProductBase):
     iconpath: str = None
     price: float = None
     images_paths_json: List[str] = None
-    categories_json: List[int] = None
+    categories: List[int] = None
     nutritional_value_json: str = None
     constituents_descr: str = None
     weight: str = None
