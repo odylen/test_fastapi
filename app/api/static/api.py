@@ -21,7 +21,7 @@ async def upload_file(filename: str, in_file: UploadFile = File(...)):
     return FileUpload(filename=filename)
 
 
-@router.post("", response_model=RequestStatus)
+@router.delete("", response_model=RequestStatus)
 async def delete_file(filename: str):
     os.remove(os.path.join("/static/", filename))
     return RequestStatus()
