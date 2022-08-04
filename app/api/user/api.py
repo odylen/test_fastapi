@@ -22,7 +22,7 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 router = APIRouter(prefix="/user", tags=["user"])
 
 
-@router.get("/", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse)
+@router.get("", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse)
 def get_user_by_id(
     user_id: int = None,
     requested_user_id: int = Depends(is_authenticated),
@@ -58,7 +58,7 @@ def get_user_by_phone(
     return db_user
 
 
-@router.put("/", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse)
+@router.put("", status_code=status.HTTP_200_OK, response_model=schemas.UserResponse)
 def edit_user(
     user: schemas.UserEdit,
     requested_user_id: int = Depends(is_authenticated),

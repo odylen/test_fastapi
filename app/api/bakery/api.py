@@ -17,7 +17,7 @@ router = APIRouter(prefix="/bakery", tags=["bakery"])
 
 
 @router.get(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     response_model=schemas.Bakery,
 )
@@ -31,7 +31,7 @@ def get_bakery(
     return bakery_db
 
 
-@router.post("/", status_code=status.HTTP_200_OK, response_model=schemas.Bakery)
+@router.post("", status_code=status.HTTP_200_OK, response_model=schemas.Bakery)
 def add_bakery(
     bakery: schemas.BakeryBase,
     is_user_admin: bool = Depends(is_admin),
@@ -42,7 +42,7 @@ def add_bakery(
     return Bakery.create_bakery(bakery, db)
 
 
-@router.put("/", status_code=status.HTTP_200_OK, response_model=schemas.Bakery)
+@router.put("", status_code=status.HTTP_200_OK, response_model=schemas.Bakery)
 def edit_bakery(
     bakery: schemas.BakeryEdit,
     is_user_admin: bool = Depends(is_admin),
@@ -56,7 +56,7 @@ def edit_bakery(
     return Bakery.edit_bakery(bakery, db)
 
 
-@router.delete("/", status_code=status.HTTP_200_OK, response_model=RequestStatus)
+@router.delete("", status_code=status.HTTP_200_OK, response_model=RequestStatus)
 def delete_bakery(
     bakery_id: int,
     is_user_admin: bool = Depends(is_admin),

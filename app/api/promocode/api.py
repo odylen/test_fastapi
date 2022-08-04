@@ -16,7 +16,7 @@ from app.middleware.auth import is_admin
 router = APIRouter(prefix="/promocode", tags=["promocode"])
 
 
-@router.post("/", status_code=status.HTTP_200_OK, response_model=schemas.Promocode)
+@router.post("", status_code=status.HTTP_200_OK, response_model=schemas.Promocode)
 def add_promocode(
     promocode: schemas.PromocodeBase,
     is_user_admin: bool = Depends(is_admin),
@@ -29,7 +29,7 @@ def add_promocode(
     return Promocode.create_promocode(promocode, db)
 
 
-@router.delete("/", status_code=status.HTTP_200_OK, response_model=RequestStatus)
+@router.delete("", status_code=status.HTTP_200_OK, response_model=RequestStatus)
 def delete_promocode(
     promocode_id: int,
     is_user_admin: bool = Depends(is_admin),

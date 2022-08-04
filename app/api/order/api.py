@@ -24,7 +24,7 @@ router = APIRouter(prefix="/order", tags=["order"])
 
 
 @router.get(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     response_model=schemas.Order,
 )
@@ -41,7 +41,7 @@ def get_order_status(
     return order
 
 
-@router.post("/", status_code=status.HTTP_200_OK, response_model=schemas.Order)
+@router.post("", status_code=status.HTTP_200_OK, response_model=schemas.Order)
 def create_order(
     order: schemas.OrderCreate,
     requested_user_id: int = Depends(is_authenticated),

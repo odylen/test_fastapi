@@ -17,7 +17,7 @@ router = APIRouter(prefix="/campaign", tags=["campaign"])
 
 
 @router.get(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     response_model=schemas.Campaign,
 )
@@ -31,7 +31,7 @@ def get_campaign(
     return campaign_db
 
 
-@router.post("/", status_code=status.HTTP_200_OK, response_model=schemas.Campaign)
+@router.post("", status_code=status.HTTP_200_OK, response_model=schemas.Campaign)
 def add_campaign(
     campaign: schemas.CampaignAdd,
     is_user_admin: bool = Depends(is_admin),
@@ -42,7 +42,7 @@ def add_campaign(
     return Campaign.create_campaign(campaign, db)
 
 
-@router.put("/", status_code=status.HTTP_200_OK, response_model=schemas.Campaign)
+@router.put("", status_code=status.HTTP_200_OK, response_model=schemas.Campaign)
 def edit_campaign(
     campaign: schemas.CampaignEdit,
     is_user_admin: bool = Depends(is_admin),
@@ -56,7 +56,7 @@ def edit_campaign(
     return Campaign.edit_campaign(campaign, db)
 
 
-@router.delete("/", status_code=status.HTTP_200_OK, response_model=RequestStatus)
+@router.delete("", status_code=status.HTTP_200_OK, response_model=RequestStatus)
 def delete_campaign(
     campaign_id: int,
     is_user_admin: bool = Depends(is_admin),

@@ -18,7 +18,7 @@ router = APIRouter(prefix="/product", tags=["product"])
 
 
 @router.get(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     response_model=schemas.Product,
 )
@@ -38,7 +38,7 @@ def get_product(
     return product_db
 
 
-@router.post("/", status_code=status.HTTP_200_OK, response_model=schemas.Product)
+@router.post("", status_code=status.HTTP_200_OK, response_model=schemas.Product)
 def add_product(
     product: schemas.ProductAdd,
     is_user_admin: bool = Depends(is_admin),
@@ -51,7 +51,7 @@ def add_product(
     return created
 
 
-@router.put("/", status_code=status.HTTP_200_OK, response_model=schemas.Product)
+@router.put("", status_code=status.HTTP_200_OK, response_model=schemas.Product)
 def edit_product(
     product: schemas.ProductEdit,
     is_user_admin: bool = Depends(is_admin),
@@ -65,7 +65,7 @@ def edit_product(
     return Product.edit_product(product, db)
 
 
-@router.delete("/", status_code=status.HTTP_200_OK, response_model=RequestStatus)
+@router.delete("", status_code=status.HTTP_200_OK, response_model=RequestStatus)
 def delete_product(
     product_id: int,
     is_user_admin: bool = Depends(is_admin),

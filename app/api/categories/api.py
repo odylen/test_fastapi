@@ -17,7 +17,7 @@ router = APIRouter(prefix="/category", tags=["category"])
 
 
 @router.get(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     response_model=schemas.Category,
 )
@@ -31,7 +31,7 @@ def get_category(
     return category_db
 
 
-@router.post("/", status_code=status.HTTP_200_OK, response_model=schemas.Category)
+@router.post("", status_code=status.HTTP_200_OK, response_model=schemas.Category)
 def add_category(
     category: schemas.CategoryBase,
     is_user_admin: bool = Depends(is_admin),
@@ -42,7 +42,7 @@ def add_category(
     return Category.create_category(category, db)
 
 
-@router.put("/", status_code=status.HTTP_200_OK, response_model=schemas.Category)
+@router.put("", status_code=status.HTTP_200_OK, response_model=schemas.Category)
 def edit_campaign(
     category: schemas.Category,
     is_user_admin: bool = Depends(is_admin),
@@ -56,7 +56,7 @@ def edit_campaign(
     return Category.edit_category(category, db)
 
 
-@router.delete("/", status_code=status.HTTP_200_OK, response_model=RequestStatus)
+@router.delete("", status_code=status.HTTP_200_OK, response_model=RequestStatus)
 def delete_campaign(
     category_id: int,
     is_user_admin: bool = Depends(is_admin),

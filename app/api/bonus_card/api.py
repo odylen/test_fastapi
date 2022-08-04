@@ -16,7 +16,7 @@ router = APIRouter(prefix="/bonus_card", tags=["bonus"])
 
 
 @router.get(
-    "/",
+    "",
     status_code=status.HTTP_200_OK,
     response_model=schemas.BonusCard,
 )
@@ -34,7 +34,7 @@ def get_bonus_card(
     return card
 
 
-@router.post("/", status_code=status.HTTP_200_OK, response_model=schemas.BonusCard)
+@router.post("", status_code=status.HTTP_200_OK, response_model=schemas.BonusCard)
 def add_bonus_card(
     user_id=None,
     requested_user_id: int = Depends(is_authenticated),
@@ -48,7 +48,7 @@ def add_bonus_card(
     return BonusCard.create_bonus_card(user_id, db)
 
 
-@router.put("/", status_code=status.HTTP_200_OK, response_model=schemas.BonusCard)
+@router.put("", status_code=status.HTTP_200_OK, response_model=schemas.BonusCard)
 def edit_bonus_card(
     card_id: int,
     user_id: int = None,
@@ -64,7 +64,7 @@ def edit_bonus_card(
     return BonusCard.edit_bonus_card(card_id, user_id=user_id, code=card_code, db=db)
 
 
-@router.delete("/", status_code=status.HTTP_200_OK, response_model=RequestStatus)
+@router.delete("", status_code=status.HTTP_200_OK, response_model=RequestStatus)
 def delete_bonus_card(
     card_id,
     is_user_admin: bool = Depends(is_admin),
