@@ -57,7 +57,7 @@ def edit_campaign(
 
 
 @router.delete("", status_code=status.HTTP_200_OK, response_model=RequestStatus)
-def delete_campaign(
+def delete_category(
     category_id: int,
     is_user_admin: bool = Depends(is_admin),
     db: Session = Depends(get_db),
