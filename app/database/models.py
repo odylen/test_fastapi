@@ -110,7 +110,7 @@ class Product(Base):
     constituents_descr = Column(String)
     weight = Column(String)
 
-    categories_json = relationship("Category", secondary=product_category_association)
+    categories = relationship("Category", secondary=product_category_association)
 
 
 class Category(Base):
