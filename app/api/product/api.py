@@ -133,4 +133,5 @@ def get_all_products(
         resp = schemas.ProductBase.from_orm(product)
         resp.categories = cats
         product_list.append(resp)
-    return db.query(models.Product).all()
+
+    return product_list
