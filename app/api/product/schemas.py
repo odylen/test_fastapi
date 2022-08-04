@@ -11,12 +11,22 @@ class ProductCategory(BaseModel):
         orm_mode = True
 
 
-class ProductBase(BaseModel):
+class ProductList(BaseModel):
     id: int
     title: str = None
     price: float = None
     iconpath: str = None
     categories: List[int] = None
+    favorite: bool = False
+
+    class Config:
+        orm_mode = True
+
+
+class ProductBase(BaseModel):
+    id: int
+    title: str = None
+    price: float = None
     favorite: bool = False
 
     class Config:
