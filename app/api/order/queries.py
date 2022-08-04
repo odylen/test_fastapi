@@ -13,12 +13,12 @@ class Order:
     @staticmethod
     def create_product(product: schemas.ProductAdd, db: Session) -> models.Product:
         product_dict = product.dict()
-        categories = product_dict["categories_json"]
-        del product_dict["categories_json"]
+        categories = product_dict["categories"]
+        del product_dict["categories"]
         db_product = models.Product(**product_dict)
         db.add(db_product)
         for category in categories:
-            db_product.categories_json.append(Category.get_category_by_id(category, db))
+            db_product.categories.append(Category.get_category_by_id(category, db))
         db.commit()
         db.refresh(db_product)
         return db_product
@@ -30,10 +30,10 @@ class Order:
         )
         for key, value in product.dict().items():
             if value:
-                if key == "categories_json":
-                    db_product.categories_json = []
+                if key == "categories":
+                    db_product.categories = []
                     for category in value:
-                        db_product.categories_json.append(Category.get_category_by_id(category, db))
+                        db_product.categories.append(Category.get_category_by_id(category, db))
                 else:
                     setattr(db_product, key, value)
         db.add(db_product)

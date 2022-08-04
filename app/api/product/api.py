@@ -47,7 +47,6 @@ def add_product(
     if not is_user_admin:
         raise not_admin_exception
     created = Product.create_product(product, db)
-    print(created.categories_json)
     return created
 
 

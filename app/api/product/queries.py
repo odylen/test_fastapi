@@ -18,7 +18,7 @@ class Product:
         db_product = models.Product(**product_dict)
         db.add(db_product)
         for category in categories:
-            db_product.categories_json.append(Category.get_category_by_id(category, db))
+            db_product.categories.append(Category.get_category_by_id(category, db))
         db.commit()
         db.refresh(db_product)
         return db_product
@@ -31,9 +31,9 @@ class Product:
         for key, value in product.dict().items():
             if value:
                 if key == "categories":
-                    db_product.categories_json = []
+                    db_product.categories = []
                     for category in value:
-                        db_product.categories_json.append(Category.get_category_by_id(category, db))
+                        db_product.categories.append(Category.get_category_by_id(category, db))
                 else:
                     setattr(db_product, key, value)
         db.add(db_product)
