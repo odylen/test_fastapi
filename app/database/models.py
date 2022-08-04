@@ -105,8 +105,8 @@ class Product(Base):
     description = Column(String)
     price = Column(Float)
     iconpath = Column(String)
-    images_paths_json = Column(ARRAY(String))
-    nutritional_value_json = Column(String)
+    images_paths = Column(ARRAY(String))
+    nutritional_value = Column(String)
     constituents_descr = Column(String)
     weight = Column(String)
 
@@ -168,6 +168,8 @@ class Order(Base):
     comment = Column(String)
     cart = Column(JSON)
     time_created = Column(DateTime(timezone=True), server_default=func.now())
+
+
 
 
 class DiscountType(enum.Enum):

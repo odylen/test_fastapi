@@ -39,9 +39,9 @@ class ProductAdd(BaseModel):
     description: str
     iconpath: str
     price: float
-    images_paths_json: List[str]
+    images_paths: List[str]
     categories: List[int]
-    nutritional_value_json: str
+    nutritional_value: str
     constituents_descr: str
     weight: str
 
@@ -55,9 +55,9 @@ class ProductEdit(ProductBase):
     description: str = None
     iconpath: str = None
     price: float = None
-    images_paths_json: List[str] = None
+    images_paths: List[str] = None
     categories: List[int] = None
-    nutritional_value_json: str = None
+    nutritional_value: str = None
     constituents_descr: str = None
     weight: str = None
 
