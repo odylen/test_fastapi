@@ -2,7 +2,6 @@ from typing import Union, List
 
 from pydantic import BaseModel
 
-from app.api.categories.schemas import Category
 
 
 class ProductCategory(BaseModel):
@@ -16,7 +15,8 @@ class ProductBase(BaseModel):
     id: int
     title: str = None
     price: float = None
-    categories: List[ProductCategory] = None
+    iconpath: str = None
+    categories: List[int] = None
     favorite: bool = False
 
     class Config:
@@ -27,7 +27,7 @@ class Product(ProductBase):
     description: str = None
     images_paths: List[str] = None
     nutritional_value: str = None
-    constituents_descr: str = None
+    composition: List[str] = None
     weight: str = None
 
     class Config:
@@ -42,7 +42,7 @@ class ProductAdd(BaseModel):
     images_paths: List[str]
     categories: List[int]
     nutritional_value: str
-    constituents_descr: str
+    composition: List[str]
     weight: str
 
     class Config:
@@ -58,7 +58,7 @@ class ProductEdit(ProductBase):
     images_paths: List[str] = None
     categories: List[int] = None
     nutritional_value: str = None
-    constituents_descr: str = None
+    composition: List[str] = None
     weight: str = None
 
     class Config:

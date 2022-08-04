@@ -93,7 +93,8 @@ product_category_association = Table(
     "product_category_association",
     Base.metadata,
     Column("product_id", ForeignKey("product.id")),
-    Column("category_id", ForeignKey("category.id")),
+    Column("category_id", ForeignKey("category.id", ondelete='CASCADE'))
+
 )
 
 
@@ -106,6 +107,7 @@ class Product(Base):
     price = Column(Float)
     iconpath = Column(String)
     images_paths = Column(ARRAY(String))
+    composition = Column(ARRAY(String))
     nutritional_value = Column(String)
     constituents_descr = Column(String)
     weight = Column(String)

@@ -17,6 +17,7 @@ services:
 
       volumes:
         - .:/code/
+        - /Users/danilcanysev/static:/static/
       ports:
         - "80:80"
       environment:

@@ -30,12 +30,16 @@ def get_product(
     product_db = Product.get_product_by_id(product_id, db)
     if not product_db:
         raise product_not_found_exception
+    cats = [category.id for category in product_db.categories]
+    product_db.categories = []
+    resp = schemas.Product.from_orm(product_db)
+    resp.categories = cats
+
     if product_db.id in User.get_user_favorites(user_id=requested_user_id, db=db):
-        resp = schemas.Product.from_orm(product_db)
         resp.favorite = True
         return resp
 
-    return product_db
+    return resp
 
 
 @router.post("", status_code=status.HTTP_200_OK, response_model=schemas.Product)
@@ -47,7 +51,13 @@ def add_product(
     if not is_user_admin:
         raise not_admin_exception
     created = Product.create_product(product, db)
-    return created
+    cats = [category.id for category in created.categories]
+    created.categories = []
+
+    resp = schemas.Product.from_orm(created)
+    resp.categories = cats
+
+    return resp
 
 
 @router.put("", status_code=status.HTTP_200_OK, response_model=schemas.Product)
@@ -61,7 +71,14 @@ def edit_product(
     product_db = Product.get_product_by_id(product.id, db)
     if not product_db:
         raise product_not_found_exception
-    return Product.edit_product(product, db)
+    created = Product.edit_product(product, db)
+    cats = [category.id for category in created.categories]
+    created.categories = []
+
+    resp = schemas.Product.from_orm(created)
+    resp.categories = cats
+
+    return resp
 
 
 @router.delete("", status_code=status.HTTP_200_OK, response_model=RequestStatus)
@@ -91,8 +108,11 @@ def get_all_products(
     favorites = User.get_user_favorites(user_id=requested_user_id, db=db)
     product_list = []
     for product in db.query(models.Product).all():
+        cats = [category.id for category in product.categories]
+        product.categories = []
         resp = schemas.ProductBase.from_orm(product)
         if product.id in favorites:
             resp.favorite = True
+        resp.categories = cats
         product_list.append(resp)
     return product_list

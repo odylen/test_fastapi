@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import uvicorn
 from fastapi_pagination import add_pagination
+from starlette.staticfiles import StaticFiles
 
 from app.api.auth.api import router as auth_router
 from app.api.bakery.api import router as bakery_router
@@ -12,6 +13,7 @@ from app.api.categories.api import router as category_router
 from app.api.order.api import router as order_router
 from app.api.product.api import router as product_router
 from app.api.promocode.api import router as promocode_router
+from app.api.static.api import router as static_router
 from app.api.user.api import router as user_router
 from database.db import Base, engine
 
@@ -33,7 +35,10 @@ api_router.include_router(product_router)
 api_router.include_router(bakery_router)
 api_router.include_router(promocode_router)
 api_router.include_router(order_router)
+api_router.include_router(static_router)
 app.include_router(api_router)
+
+app.mount("/static", StaticFiles(directory="/static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
