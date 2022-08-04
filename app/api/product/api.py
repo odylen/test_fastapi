@@ -126,5 +126,11 @@ def get_all_products(
 def get_all_products(
     db: Session = Depends(get_db),
 ):
-
+    product_list = []
+    for product in db.query(models.Product).all():
+        cats = [category.id for category in product.categories]
+        product.categories = []
+        resp = schemas.ProductBase.from_orm(product)
+        resp.categories = cats
+        product_list.append(resp)
     return db.query(models.Product).all()
