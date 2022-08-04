@@ -5,6 +5,7 @@ from jose import jwt
 expire = datetime.datetime(2100, 12, 20, 0, 0)
 data = {
     "id": 1,
+    "type":"access"
 }
 to_encode = data.copy()
 to_encode.update({"exp": expire})

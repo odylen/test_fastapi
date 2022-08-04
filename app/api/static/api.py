@@ -10,7 +10,7 @@ from app.api.static.schemas import FileUpload
 router = APIRouter(prefix="/static", tags=["static"])
 
 
-@router.post("/", response_model=FileUpload)
+@router.post("", response_model=FileUpload)
 async def upload_file(filename: str, in_file: UploadFile = File(...)):
     fs = await in_file.read()
     Path("/static").mkdir(parents=True, exist_ok=True)
@@ -21,7 +21,7 @@ async def upload_file(filename: str, in_file: UploadFile = File(...)):
     return FileUpload(filename=filename)
 
 
-@router.post("/", response_model=RequestStatus)
+@router.post("", response_model=RequestStatus)
 async def delete_file(filename: str):
     os.remove(os.path.join("/static/", filename))
     return RequestStatus()
