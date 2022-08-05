@@ -46,8 +46,8 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     phone = Column(String, unique=True, index=True)
     name = Column(String)
-    family = Column(String)
-    patronymic = Column(String)
+    date_of_birth = Column(String)
+    email = Column(String)
     type = Column(Enum(AccountType), default=AccountType.USER)
     cart = relationship("Cart", back_populates="user", uselist=False)
 
