@@ -15,6 +15,7 @@ class User(UserBase):
     id: int
     name: str = None
     email: str = None
+    imagepath: str = None
     date_of_birth: str = None
 
     class Config:
@@ -25,6 +26,8 @@ class UserResponse(BaseModel):
     id: int
     phone: str
     name: str = None
+    imagepath: str = None
+    phone: str = None
     email: str = None
     date_of_birth: str = None
     bonuses: int = 0
@@ -37,6 +40,7 @@ class UserEdit(BaseModel):
     id: Union[int, None] = None
     name: Union[str, None] = None
     email: Union[str, None] = None
+    imagepath: Union[str, None] = None
     date_of_birth: Union[str, None] = None
     phone: Union[str, None] = None
 
