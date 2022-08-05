@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from fastapi import FastAPI, status, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -39,6 +41,7 @@ api_router.include_router(static_router)
 app.include_router(api_router)
 
 app.mount("/static", StaticFiles(directory="/static"), name="static")
+Path("/static").mkdir(parents=True, exist_ok=True)
 
 app.add_middleware(
     CORSMiddleware,
