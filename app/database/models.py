@@ -35,8 +35,8 @@ class BonusCard(Base):
 favorite_product_association = Table(
     "favorite_product_association",
     Base.metadata,
-    Column("user_id", ForeignKey("user.id")),
-    Column("product_id", ForeignKey("product.id")),
+    Column("user_id", ForeignKey("user.id", ondelete='CASCADE')),
+    Column("product_id", ForeignKey("product.id", ondelete='CASCADE')),
 )
 
 
@@ -92,7 +92,7 @@ class Campaign(Base):
 product_category_association = Table(
     "product_category_association",
     Base.metadata,
-    Column("product_id", ForeignKey("product.id")),
+    Column("product_id", ForeignKey("product.id", ondelete='CASCADE')),
     Column("category_id", ForeignKey("category.id", ondelete='CASCADE'))
 
 )

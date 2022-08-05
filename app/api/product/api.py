@@ -111,7 +111,7 @@ def get_all_products(
     for product in db.query(models.Product).all():
         cats = [category.id for category in product.categories]
         product.categories = []
-        resp = schemas.ProductBase.from_orm(product)
+        resp = schemas.ProductList.from_orm(product)
         if product.id in favorites:
             resp.favorite = True
         resp.categories = cats
@@ -131,7 +131,7 @@ def get_all_products(
     for product in db.query(models.Product).all():
         cats = [category.id for category in product.categories]
         product.categories = []
-        resp = schemas.ProductBase.from_orm(product)
+        resp = schemas.ProductList.from_orm(product)
         resp.categories = cats
         product_list.append(resp)
 
